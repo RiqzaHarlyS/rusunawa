@@ -48,6 +48,7 @@ class CalonPendaftarResource extends Resource
                 Tables\Columns\TextColumn::make('provinsi')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('nomor_whatsapp')->label('No. WhatsApp')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('email')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('status')->sortable()->searchable(),
 
                 Tables\Columns\TextColumn::make('ktp')
                     ->label('KTP')
@@ -104,7 +105,7 @@ class CalonPendaftarResource extends Resource
                                 }
 
                                 // Hapus data calon pendaftar yang diterima
-                                $record->delete();
+                                $record->update(['status' => 'diterima']);
                             } else {
                                 // Jika kamar penuh
                                 Log::warning('Kamar ' . $kamar->nomor_kamar . ' sudah penuh untuk pendaftar dengan NPM ' . $record->npm);

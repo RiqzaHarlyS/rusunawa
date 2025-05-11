@@ -31,6 +31,7 @@ class Formulir extends Model
         'kk',
         'formulir',
         'kontrak',
+        'status',
     ];
 
     public function penghuni()

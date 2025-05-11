@@ -14,12 +14,12 @@ class ListPenghunis extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+
         ];
     }
 
     protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return Penghuni::with(['formulir', 'kamar'])->query();
+        return Penghuni::with(['formulir', 'kamar']);
     }
 }

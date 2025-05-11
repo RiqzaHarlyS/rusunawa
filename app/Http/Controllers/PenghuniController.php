@@ -11,48 +11,55 @@ class PenghuniController extends Controller
 {
     public function index()
     {
-        $penghunis = Penghuni::with(['formulir', 'kamar'])->get();
+        $penghuni = Penghuni::with(['formulir', 'kamar'])->get();
         return view('penghuni.index', compact('penghuni'));
     }
 
     public function create()
     {
-        $formulirs = Formulir::all();
-        $kamars = Kamar::where('status', 'Tersedia')->get();
+        $formulir = Formulir::all();
+        $kamar = Kamar::where('status', 'Tersedia')->get();
         return view('penghuni.create', compact('formulirs', 'kamars'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'formulir_npm' => 'required|exists:formulirs,npm',
-            'kamar_id' => 'required|exists:kamars,id'
+            'formulir_npm' => 'required|exists:formulir,npm',
+            'kamar_id' => 'required|exists:kamar,id'
         ]);
-    
+
+        // Cek apakah sudah jadi penghuni
+        if (Penghuni::where('formulir_npm', $validated['formulir_npm'])->exists()) {
+            return redirect()->back()->with('error', 'Pendaftar ini sudah menjadi penghuni.');
+        }
+
         $formulir = Formulir::findOrFail($validated['formulir_npm']);
         $kamar = Kamar::findOrFail($validated['kamar_id']);
-    
+
         // Ambil tahun masuk dari NPM
         $tahunMasuk = '20' . substr($formulir->npm, 0, 2);
-    
+
         // Tambahkan penghuni
         Penghuni::create([
             'formulir_npm' => $formulir->npm,
             'kamar_id' => $kamar->id,
             'tahun_masuk' => $tahunMasuk
         ]);
-    
-        // Cek jumlah penghuni di kamar dan update status kamar
-        $jumlahPenghuni = $kamar->penghuni()->count();  // Pastikan relasi penghuni di model kamar
-    
+
+        // Hapus dari tabel formulir
+        $formulir->delete();
+
+        // Hitung ulang jumlah penghuni
+        $jumlahPenghuni = $kamar->penghuni()->count();
+
+        // Update status kamar
         if ($jumlahPenghuni >= $kamar->kapasitas) {
-            // Update status kamar menjadi penuh jika sudah terisi
             $kamar->update(['status' => 'Penuh']);
         } else {
-            // Status kamar tetap tersedia jika jumlah penghuni < kapasitas
             $kamar->update(['status' => 'Tersedia']);
         }
-    
+
         return redirect()->route('penghuni.index')->with('success', 'Penghuni berhasil ditambahkan.');
     }
 }

@@ -27,7 +27,7 @@
         </ol>
       
         <!-- Tombol sejajar dengan teks -->
-        <a href="#" class="text-blue-700 font-semibold underline mt-3 inline-block pl-6">Download dokumen</a>
+        <a href="{{ asset('doc/Formulir_Pendaftaran_Calon_Penghuni_Rusunawa.pdf') }}" class="text-blue-700 font-semibold underline mt-3 inline-block pl-6">Download dokumen</a>
       </section>      
     
       <!-- Kontrak Tata Tertib Penghunian -->
@@ -70,7 +70,7 @@
           <li>
             Ketentuan-ketentuan lain yang diatur dalam Perjanjian Sewa Menyewa Rusunawa dan diberlakukan oleh Tim Pengelola.
           </li>
-          <a href="#" class="text-blue-700 font-semibold underline mt-3 inline-block">Download dokumen</a>
+          <a href="{{ asset('doc/Surat_Pernyataan_Untuk_Mematuhi_Tata_Tertib_Penghunian.pdf') }}" class="text-blue-700 font-semibold underline mt-3 inline-block">Download dokumen</a>
         </ol>
       </section>
       
